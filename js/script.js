@@ -3,6 +3,12 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
+// select the element with a class of `student-list` and assign it to a variable
+const studentList = document.querySelector('.student-list');
+
+
+// ==============================================================================
+
 /*
 The `showPage` function
 This function creates and inserts/appends the elements needed to display a "page" of nine students
@@ -14,8 +20,7 @@ function showPage(list, page) {
     let startIndex = (page * 9) - 9;
     let endIndex = (page * 9) - 1;
 
-    // select the element with a class of `student-list` and assign it to a variable
-    const studentList = document.querySelector('.student-list');
+
 
     // set the innerHTML property of the variable above to an empty string
     studentList.innerHTML = '';
@@ -45,6 +50,8 @@ function showPage(list, page) {
         }
     };
 }
+
+// ==============================================================================
 
 /*
 the `addPagination` function
@@ -98,6 +105,76 @@ function addPagination(list) {
     });
 }
 
+// ==============================================================================
+
 // Call functions
 showPage(data, 1);
 addPagination(data);
+
+// ==============================================================================
+
+/*
+Extra Credit - Search Bar 
+*/
+
+// select the header element
+const header = document.querySelector('.header');
+
+// html markup for the searchbar
+const searchBarHTML = `
+    <div>
+        <label for="search" class="student-search">
+            <span>Search by name</span>
+            <input id="search" placeholder="Search by name...">
+            <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+        </label>
+    </div>
+`;
+
+// insert the above searchbar into the header element
+header.insertAdjacentHTML("beforeend", searchBarHTML);
+
+// ==============================================================================
+
+/*
+Extra Credit - Search Bar Functionality
+*/
+
+// select the search bar
+const searchBar = document.getElementById('search');
+
+// listen for search text input
+searchBar.addEventListener('input', () => {
+    // creates new empty array of 'data' objects
+    let newData = [];
+    // set the typed text to upper case and store as variable
+    let searchInput = searchBar.value.toUpperCase();
+
+    data.forEach((object) => {
+        // select each name and upper case
+        let fullName = `${object.name.first} ${object.name.last}`.toUpperCase();
+        
+        // check if search input is included in name
+        if (fullName.includes(searchInput)) {
+            // if so, push object to new array
+            newData.push(object);
+        }
+    });
+
+
+
+    // call showPage & addPagination functions with new array on each keystroke
+    showPage(newData, 1);
+    addPagination(newData);
+
+    // if no names match search, display "no results found"
+    if(newData.length === 0) {
+        studentList.innerHTML = `
+            <li>
+                <h3 style="text-align: center; font-size: 3rem">No Results Found</h3>
+            </li>
+        `;
+    }
+});
+
+// ==============================================================================
