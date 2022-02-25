@@ -143,38 +143,48 @@ Extra Credit - Search Bar Functionality
 // select the search bar
 const searchBar = document.getElementById('search');
 
-// listen for search text input
-searchBar.addEventListener('input', () => {
-    // creates new empty array of 'data' objects
-    let newData = [];
-    // set the typed text to upper case and store as variable
-    let searchInput = searchBar.value.toUpperCase();
+// select the search button
+const searchBtn = document.querySelector('.student-search button');
 
-    data.forEach((object) => {
-        // select each name and upper case
-        let fullName = `${object.name.first} ${object.name.last}`.toUpperCase();
-        
-        // check if search input is included in name
-        if (fullName.includes(searchInput)) {
-            // if so, push object to new array
-            newData.push(object);
+// function to update pages with search bar / btn
+function handleSearch() {
+
+        // creates new empty array of 'data' objects
+        let newData = [];
+
+        // set the typed text to upper case and store as variable
+        let searchInput = searchBar.value.toUpperCase();
+    
+        data.forEach((object) => {
+            
+            // select each name and upper case
+            let fullName = `${object.name.first} ${object.name.last}`.toUpperCase();
+            
+            // check if search input is included in name
+            if (fullName.includes(searchInput)) {
+
+                // if so, push object to new array
+                newData.push(object);
+            }
+        });
+    
+        // call showPage & addPagination functions with new array on each keystroke
+        showPage(newData, 1);
+        addPagination(newData);
+    
+        // if no names match search, display "no results found"
+        if(newData.length === 0) {
+            studentList.innerHTML = `
+                <li>
+                    <h3 style="text-align: center; font-size: 3rem">No Results Found</h3>
+                </li>
+            `;
         }
-    });
+}
 
+// listen for search text input
+searchBar.addEventListener('keyup', () => handleSearch());
 
-
-    // call showPage & addPagination functions with new array on each keystroke
-    showPage(newData, 1);
-    addPagination(newData);
-
-    // if no names match search, display "no results found"
-    if(newData.length === 0) {
-        studentList.innerHTML = `
-            <li>
-                <h3 style="text-align: center; font-size: 3rem">No Results Found</h3>
-            </li>
-        `;
-    }
-});
-
+// listen for search button click
+searchBtn.addEventListener('click', () => handleSearch());
 // ==============================================================================
